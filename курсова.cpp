@@ -5,18 +5,21 @@
 #include <queue>
 #include <set>
 #include <iomanip>
+#include <string>
 
 using namespace std;
 
 class BattleshipGame {
 private:
+
+    string boardSizeS;
     int boardSize;
     vector<vector<char>> playerBoard;
     vector<vector<char>> computerBoard;
-    vector<vector<bool>> playerShots; 
+    vector<vector<bool>> playerShots;
     vector<vector<bool>> computerShots;
 
-   
+
     int playerShips2, playerShips3, playerShips4;
     int computerShips2, computerShips3, computerShips4;
 
@@ -36,9 +39,32 @@ public:
     }
 
     void initializeGame() {
-        cout << "Введіть розмір поля : ";
-        cin >> boardSize;
 
+        int count = 0;
+        cout << "Введіть розмір поля : ";
+        cin >> boardSizeS;
+        for (int i = 0; i < boardSizeS.length(); i++) {
+            if (isdigit(boardSizeS[i])) {
+                count++;
+
+
+            }
+
+        }
+        if (boardSizeS.length() == count) {
+            boardSize = stoi(boardSizeS);
+        }
+        else {
+            boardSize = 5;
+            cout << "Мінімальний розмір поля - 5x5!\n";
+        }
+       
+    
+
+
+        
+     
+        
         if (boardSize < 5) {
             cout << "Мінімальний розмір поля - 5x5!\n";
             boardSize = 5;
@@ -172,10 +198,26 @@ public:
                 cout << " (потрібно розставити хоча б один корабель!)";
             }
             cout << "\nВаш вибір: ";
-
+            string choiceS;
+            cin >> choiceS;
             int choice;
-            cin >> choice;
+            
+            int count = 0;
+           
+            for (int i = 0; i < choiceS.length(); i++) {
+                if (isdigit(choiceS[i])) {
+                    count++;
 
+
+                }
+
+            }
+            if (choiceS.length() == count) {
+                choice = stoi(choiceS);
+            }
+            else {
+                choice = 3;
+            }
             if (choice == 0) {
                 if (totalShips == 0) {
                     cout << "Потрібно розставити хоча б один корабель!\n";
@@ -184,15 +226,31 @@ public:
                 break;
             }
             else if (choice == 1) {
-               
+                string shipSizeS;
                 int shipSize;
                 cout << "\nВиберіть розмір корабля:\n";
                 cout << "2 - Корабель 1x2\n";
                 cout << "3 - Корабель 1x3\n";
                 cout << "4 - Корабель 1x4\n";
                 cout << "Ваш вибір: ";
-                cin >> shipSize;
+                cin >> shipSizeS;
+                int countSize = 0;
+              
+                
+                for (int i = 0; i < shipSizeS.length(); i++) {
+                    if (isdigit(shipSizeS[i])) {
+                        countSize++;
 
+
+                    }
+
+                }
+                if (shipSizeS.length() == countSize) {
+                    shipSize = stoi(shipSizeS);
+                }
+                else {
+                    shipSize = 5;
+                }
                 if (shipSize < 2 || shipSize > 4) {
                     cout << "Неправильний розмір! Виберіть 2, 3 або 4.\n";
                     continue;
@@ -203,11 +261,46 @@ public:
                 const int MAX_PLAYER_ATTEMPTS = 3;
 
                 while (!placed && attempts < MAX_PLAYER_ATTEMPTS) {
+                    string rowS, colS, orientationS;
                     int row, col, orientation;
+                    uniform_int_distribution<int> orientDistOr(0, 1);
                     cout << "\nРозставляння корабля розміром " << "1x"  << shipSize<< "\n";
                     cout << "Введіть координати (рядок стовпець): ";
-                    cin >> row >> col;
+                    cin >> rowS >> colS;
+                    int countRow = 0;
+                    
+                   
+                    for (int i = 0; i < rowS.length(); i++) {
+                        if (isdigit(rowS[i])) {
+                            countRow++;
 
+
+                        }
+
+                    }
+                    if (rowS.length() == countRow) {
+                        row = stoi(rowS);
+                    }
+                    else {
+                       row = boardSize + 3;
+                    }
+                    int countCol = 0;
+
+
+                    for (int i = 0; i < colS.length(); i++) {
+                        if (isdigit(colS[i])) {
+                            countCol++;
+
+
+                        }
+
+                    }
+                    if (colS.length() == countCol) {
+                        col = stoi(colS);
+                    }
+                    else {
+                        col = boardSize + 3;
+                    }
                     if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) {
                         cout << "Неправильні координати!\n";
                         attempts++;
@@ -215,8 +308,24 @@ public:
                     }
 
                     cout << "Орієнтація (0 - горизонтально, 1 - вертикально): ";
-                    cin >> orientation;
+                    cin >> orientationS;
+                    int countOr = 0;
 
+
+                    for (int i = 0; i < orientationS.length(); i++) {
+                        if (isdigit(orientationS[i])) {
+                            countOr++;
+
+
+                        }
+
+                    }
+                    if (orientationS.length() == countOr) {
+                        orientation = stoi(orientationS);
+                    }
+                    else {
+                        orientation =  orientDistOr(rng);
+                    }
                     bool horizontal = (orientation == 0);
 
                     if (isValidPosition(row, col, shipSize, horizontal, playerBoard)) {
