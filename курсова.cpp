@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include <algorithm>
 #include <queue>
 #include <set>
 #include <iomanip>
@@ -681,11 +680,41 @@ public:
                 printBoard(computerBoard, true);
                 cout << "Ваше поле:\n";
                 printBoard(playerBoard);
-
+                string rowS, colS;
                 int row, col;
-                cout << "Введіть координати для пострілу (рядок стовпець): ";
-                cin >> row >> col;
+                int countRowShot = 0;
+                cin >> rowS >> colS;
+                for (int i = 0; i < rowS.length(); i++) {
+                    if (isdigit(rowS[i])) {
+                        countRowShot++;
 
+
+                    }
+
+                }
+                if (rowS.length() == countRowShot) {
+                    row = stoi(rowS);
+                }
+                else {
+                    row = boardSize + 3;
+                }
+                int countColShot = 0;
+
+
+                for (int i = 0; i < colS.length(); i++) {
+                    if (isdigit(colS[i])) {
+                        countColShot++;
+
+
+                    }
+
+                }
+                if (colS.length() == countColShot) {
+                    col = stoi(colS);
+                }
+                else {
+                    col = boardSize + 3;
+                }
                 if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) {
                     cout << "Неправильні координати!\n";
                     continue;
